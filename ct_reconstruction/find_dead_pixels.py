@@ -3,38 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import general_functions as gen
 
-# This will find the dead pixels in the attenuation data (air corrected)
-
-
-def blah(data):
-    """
-    This function will take your attenuation data from a PCD acquisition and find the dead pixels and return the mask
-    of the dead pixels (data must be corrected for air to obtain the attenuation data
-    :param data: ndarray
-            Must have at least 2 frames of data so that the mean pixel value can be found
-            Just need the last bin (EC bin)
-            Shape: <frames, 24, 576>
-    :return: mask
-            Mask with np.nan where there are dead pixels
-    """
-
-    data_mean = np.mean(data, axis=0)  # Take the mean of the data over the frame axis
-
-    # Compute the gradient over the rows and the columns
-    grad_row = np.abs(np.gradient(data_mean, axis=0))
-    grad_col = np.abs(np.gradient(data_mean, axis=1))
-
-    # Set any pixels that have a gradient over 0.15 to be nan and any other to be 1
-    grad_row[grad_row >= 0.2] = np.nan
-    grad_col[grad_col >= 0.2] = np.nan
-    grad_row[grad_row < 0.2] = 1
-    grad_col[grad_col < 0.2] = 1
-
-    # Compute the mask by multiplying the two gradients together
-    mask = np.multiply(grad_row, grad_col)
-
-    return mask, grad_row, grad_col
-
 
 def find_dead_pixels(data1, data2, dark):
     """
@@ -58,7 +26,6 @@ def find_dead_pixels(data1, data2, dark):
     dpm[data > max_data] = np.nan
     dpm[data < min_data] = np.nan
 
-    # dpm[np.where(np.isfinite(dpm))] = 1
     dpm[dpm >= 0.5] = np.nan
     dpm[dpm < 0.5] = 1
 
@@ -99,7 +66,6 @@ def find_dead_pixels_all_bins(data, dark):
         dpm[:, :, b][data[:, :, b] > max_data[b]] = np.nan
         dpm[:, :, b][data[:, :, b] < min_data[b]] = np.nan
 
-    # dpm[np.where(np.isfinite(dpm))] = 1
     dpm[dpm >= 0.5] = np.nan
     dpm[dpm < 0.5] = 1
 

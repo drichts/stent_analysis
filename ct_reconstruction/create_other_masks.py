@@ -2,16 +2,6 @@ import os
 import numpy as np
 import mask_functions as msk
 
-directory = r'D:\OneDrive - University of Victoria\Research\LDA Data'
-# directory = r'C:\Users\drich\OneDrive - University of Victoria\Research\LDA Data'
-folder = '22_08_04_CT_stents'
-sub = 'green_fast'
-# bin_num = 2  # -1 for the last bin
-
-mask_type = 'water'  # Mask types: phantom, contrast_200, contrast_600, contrast_vial_tip, mtf_patterns,
-                       # mtf_contrast_square, mtf_contrast_round, water, air
-num_rois = 1
-
 
 def create_masks(img, mask_type=mask_type, num_rois=num_rois, folder=folder, sub=sub, directory=directory,
                  append='', save=True):
@@ -110,10 +100,6 @@ def create_masks(img, mask_type=mask_type, num_rois=num_rois, folder=folder, sub
 
 if __name__ == '__main__':
 
-    from scipy.io import loadmat
-    # img = loadmat(os.path.join(directory, folder, sub, 'CT', 'CT.mat'))['ct_img'][-1, 12]
-    # masks = np.zeros((24, 512, 512))
-    # for i in np.arange(0, 24):
     img = np.load(os.path.join(directory, folder, sub, 'Norm CT', 'CT_FDK.npy'))[-1, 14]
 
     masks = create_masks(img)

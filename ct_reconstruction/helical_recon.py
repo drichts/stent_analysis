@@ -3,7 +3,7 @@ import tigre
 import numpy as np
 from tigre.utilities import sample_loader
 import tigre.algorithms as algs
-from lda.pcd_geom import PCDGeometry
+from ct_reconstruction.pcd_geom import PCDGeometry
 import matplotlib.pyplot as plt
 import time
 from attenuation.filter_spectrum import filter_spectrum

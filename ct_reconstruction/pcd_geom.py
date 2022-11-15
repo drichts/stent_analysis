@@ -1,7 +1,7 @@
 import numpy as np
 from tigre.utilities.geometry import Geometry
 
-
+# The geometry of PCD scans
 class PCDGeometry(Geometry):
     def __init__(self, DSD=578.0, DSO=322.0, side=512, z_stack=24, h_offset=0, v_offset=0):
 

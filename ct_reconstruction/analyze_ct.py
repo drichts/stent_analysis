@@ -2,8 +2,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import mask_functions as msk
-from lda.create_other_masks import create_masks
-# from tomopy.misc.corr import remove_ring
+from ct_reconstruction.create_other_masks import create_masks
 
 # VARIABLES TO CHANGE
 dir_folder = '22_10_11_CT_stents_heli'
