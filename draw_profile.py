@@ -13,7 +13,13 @@ from mask_functions import click_image
 
 
 def rotate_profile(center, degree, edge_pt):
+    """
 
+    :param center:
+    :param degree:
+    :param edge_pt:
+    :return:
+    """
     # Find the distance betweeen the edge and the center
     r = np.sqrt((center[0] - edge_pt[0])**2 + (center[1] - edge_pt[1])**2)
 
@@ -30,10 +36,18 @@ def rotate_profile(center, degree, edge_pt):
 
 
 def find_dist_with_fwhm(center, edge_pt, image, num_new_pts=100, vxl_sz=0.511):
+    """
+
+    :param center:
+    :param edge_pt:
+    :param image:
+    :param num_new_pts:
+    :param vxl_sz:
+    :return:
+    """
 
     x0, y0 = center
     x1, y1 = extend_point(center, edge_pt)
-
 
     xpts, ypts = np.linspace(x0, x1, num_new_pts), np.linspace(y0, y1, num_new_pts)
 
@@ -71,6 +85,12 @@ def find_dist_with_fwhm(center, edge_pt, image, num_new_pts=100, vxl_sz=0.511):
 
 
 def extend_point(center, edge_pt):
+    """
+
+    :param center:
+    :param edge_pt:
+    :return:
+    """
     x1, y1 = center
     x2, y2 = edge_pt
 
@@ -105,51 +125,3 @@ def extend_point(center, edge_pt):
         return pt1
     else:
         return pt2
-
-
-if __name__ == '__main__':
-    folder = '22_08_09_CT_stents'
-    sub = '10cm_phantom'
-    subsub = 'pink'
-
-    path = rf'C:\Users\drich\OneDrive - University of Victoria\Research\Clinical CT\{folder}\{sub}\{subsub}\Data'
-    # path = rf'D:\OneDrive - University of Victoria\Research\Clinical CT\{folder}\{sub}\{subsub}\Data'
-    files = glob(os.path.join(path, '*.dcm'))
-    files.sort(key=natural_keys)
-
-    data = pyd.dcmread(files[21])
-
-    im = data.pixel_array
-
-    coords = crop_array(im)
-    im = im[coords[0]:coords[1], coords[2]:coords[3]]
-
-    ep = np.squeeze(click_image(im))
-
-
-    for file in files[21:50]:
-
-        data = pyd.dcmread(file)
-
-        im = data.pixel_array
-
-        im1 = im[coords[0]:coords[1], coords[2]:coords[3]]
-        # im1 = np.copy(im)
-        im1 = ((im1 - im1.min()) * (1/(im1.max() - im1.min()) * 255)).astype('uint8')
-        im1 = cv2.medianBlur(im1, 5)
-        circle = cv2.HoughCircles(im1, cv2.HOUGH_GRADIENT, 1, 20, param1=15, param2=10, minRadius=0, maxRadius=0)
-
-        fig = plt.figure()
-        plt.imshow(im1)
-
-        circle = circle[0]
-        center = (circle[0, 0], circle[0, 1])
-
-        dist = int(np.sqrt((center[0] - ep[0])**2 + (center[1] - ep[1])**2))
-
-        plt.scatter(center[0], center[1], color='red')
-
-        plt.pause(1)
-        plt.close()
-
-
